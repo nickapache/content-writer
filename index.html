@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06080f;--card:#0a0d1a;
+  --teal:#14b8a6;--blue:#3b82f6;--violet:#8b5cf6;
+  --amber:#f59e0b;--green:#22c55e;
+  --border:rgba(20,184,166,0.13);--text:#dde4f0;--muted:#4a5568
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+.hero{position:relative;padding:5rem 2rem 3.5rem;text-align:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 140% 70% at 50% -10%,rgba(20,184,166,0.1) 0%,rgba(59,130,246,0.06) 45%,transparent 70%)}
+.grid-pat{position:absolute;inset:0;background-image:linear-gradient(rgba(20,184,166,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(20,184,166,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.hero h1{font-size:clamp(2.8rem,7vw,4.8rem);font-weight:900;line-height:1.05;letter-spacing:-.03em;background:linear-gradient(135deg,#fff 20%,#99f6e4 55%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.6rem}
+.hero-role{font-size:1rem;color:var(--muted);margin-bottom:.5rem;font-weight:500}
+.hero-tagline{font-size:1.15rem;font-weight:500;color:#9baab8;max-width:660px;margin:0 auto 2rem;line-height:1.6}
+.hero-tagline em{color:var(--teal);font-style:normal}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tc{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);color:#6b7d8e;border-radius:6px;font-size:12px;font-weight:500;padding:4px 12px}
+.tc.hi{border-color:rgba(20,184,166,0.32);color:var(--teal);background:rgba(20,184,166,0.06)}
+.tc.hi2{border-color:rgba(59,130,246,0.32);color:var(--blue);background:rgba(59,130,246,0.06)}
+.tc.hi3{border-color:rgba(139,92,246,0.32);color:var(--violet);background:rgba(139,92,246,0.06)}
+
+.statbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));background:#080a14;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat{padding:1.3rem .8rem;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.sn{display:block;font-size:1.8rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--teal),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px}
+
+.callout{max-width:820px;margin:3rem auto;padding:1.8rem 2rem;background:rgba(20,184,166,0.05);border:1px solid rgba(20,184,166,0.16);border-radius:14px;text-align:center}
+.callout-label{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.8rem}
+.callout p{font-size:1rem;color:#8ba0b2;line-height:1.7}
+.callout strong{color:var(--text);font-weight:600}
+
+.sec{padding:2.5rem 2rem;max-width:1100px;margin:0 auto}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid rgba(20,184,166,0.08)}
+.si{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.si-t{background:rgba(20,184,166,0.1)}
+.si-b{background:rgba(59,130,246,0.1)}
+.si-v{background:rgba(139,92,246,0.1)}
+.si-a{background:rgba(245,158,11,0.1)}
+.si-g{background:rgba(34,197,94,0.1)}
+.sh-title{font-size:1.15rem;font-weight:700;color:#fff}
+.sh-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.divider{height:1px;background:rgba(20,184,166,0.06)}
+
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1.3rem;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.card:hover{border-color:rgba(20,184,166,0.28);transform:translateY(-2px)}
+.ct{position:absolute;top:0;left:0;right:0;height:2px}
+.ct-t{background:linear-gradient(90deg,var(--teal),#0d9488)}
+.ct-b{background:linear-gradient(90deg,var(--blue),#1d4ed8)}
+.ct-v{background:linear-gradient(90deg,var(--violet),#6d28d9)}
+.ct-a{background:linear-gradient(90deg,var(--amber),#b45309)}
+.ct-g{background:linear-gradient(90deg,var(--green),#15803d)}
+.cpub{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px;color:var(--muted)}
+.d{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.d-dl{background:var(--green)}.d-tb{background:var(--blue)}.d-ct{background:var(--amber)}.d-yf{background:#a855f7}
+.card h3{font-size:14px;font-weight:600;color:#dde4f0;line-height:1.4;margin-bottom:8px}
+.card p{font-size:12px;color:var(--muted);line-height:1.6}
+.cfoot{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.chip{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em}
+.ch-t{background:rgba(20,184,166,0.1);color:var(--teal)}
+.ch-b{background:rgba(59,130,246,0.1);color:var(--blue)}
+.ch-v{background:rgba(139,92,246,0.1);color:var(--violet)}
+.ch-a{background:rgba(245,158,11,0.1);color:var(--amber)}
+.ch-g{background:rgba(34,197,94,0.1);color:var(--green)}
+.clink{font-size:11px;color:#2d3f50;text-decoration:none}
+.clink:hover{color:var(--teal)}
+
+.feature{background:linear-gradient(135deg,#0a1018 0%,#080c14 100%);border:1px solid rgba(20,184,166,0.2);border-radius:14px;padding:1.8rem;position:relative;overflow:hidden;margin-bottom:14px}
+.feature::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(20,184,166,0.06),transparent 70%);pointer-events:none}
+.feat-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.feature h3{font-size:1.05rem;font-weight:700;color:#fff;line-height:1.4;margin-bottom:10px}
+.feature p{font-size:13px;color:#5a6e80;line-height:1.65}
+.feat-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.feat-tag{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;color:#7a9db5}
+
+/* TIMELINE */
+.timeline{margin-top:1.5rem;position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--amber),rgba(245,158,11,0.1))}
+.tl-item{position:relative;margin-bottom:1.3rem}
+.tl-dot{position:absolute;left:-1.7rem;top:4px;width:12px;height:12px;border-radius:50%;background:var(--amber);border:2px solid #06080f;box-shadow:0 0 6px rgba(245,158,11,0.4)}
+.tl-date{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.tl-item h4{font-size:13px;font-weight:600;color:#dde4f0;margin-bottom:3px}
+.tl-item p{font-size:12px;color:var(--muted);line-height:1.5}
+.tl-item a{font-size:11px;color:var(--amber);text-decoration:none}
+
+.sample{background:var(--card);border:1px solid rgba(20,184,166,0.13);border-radius:12px;padding:1.5rem;margin-bottom:12px;position:relative}
+.sample::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--teal),var(--blue));border-radius:2px 0 0 2px}
+.sample-label{font-size:9px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.6rem}
+.sample blockquote{font-size:14px;color:#c0cfe0;line-height:1.7;font-style:italic;padding-left:1rem}
+.sample .attrib{font-size:11px;color:var(--muted);margin-top:.7rem;padding-left:1rem}
+
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:1.5rem}
+.hl{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:1.2rem;display:flex;gap:12px}
+.chk{width:26px;height:26px;border-radius:6px;background:rgba(20,184,166,0.1);border:1px solid rgba(20,184,166,0.22);color:var(--teal);font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.hl h4{font-size:13px;font-weight:600;color:#dde4f0;margin-bottom:4px}
+.hl p{font-size:12px;color:var(--muted);line-height:1.5}
+
+.close{max-width:740px;margin:3rem auto;padding:2.5rem;background:linear-gradient(135deg,#0a1018,#080c16);border:1px solid rgba(20,184,166,0.2);border-radius:16px;text-align:center;position:relative;overflow:hidden}
+.close::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(20,184,166,0.06),transparent 70%)}
+.close h2{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:.8rem}
+.close p{font-size:.95rem;color:#5a6e80;line-height:1.7;margin-bottom:1.5rem}
+.tag-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.ctag{display:inline-flex;align-items:center;gap:5px;background:rgba(20,184,166,0.07);border:1px solid rgba(20,184,166,0.2);color:#7dd3c0;border-radius:6px;font-size:12px;font-weight:600;padding:3px 10px}
+
+.footer{background:#04060c;border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
+.fn{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:4px}
+.fr{font-size:13px;color:#2d3f50;margin-bottom:2rem}
+.cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0d9488,#1d4ed8);color:#fff;padding:13px 30px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-bottom:2rem;transition:opacity .2s}
+.cta:hover{opacity:.85}
+.contacts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:1.5rem}
+.cbtn{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);color:#6b7d8e;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;text-decoration:none;transition:all .2s}
+.cbtn:hover{border-color:rgba(20,184,166,0.4);color:var(--teal)}
+.cbtn.li{background:#0a66c2;border-color:#0a66c2;color:#fff}
+.pub-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.pub-links a{font-size:12px;color:#2d3f50;text-decoration:none}
+.pub-links a:hover{color:var(--teal)}
+a{text-decoration:none;color:inherit}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-pat"></div>
+  <h1>Osato Avan-Nomayo</h1>
+  <p class="hero-role">DeFi Correspondent · Crypto Regulation Writer · On-chain Investigations</p>
+  <p class="hero-tagline">He has spent years turning blockchain data, court filings, and sanctions notices into stories people can actually follow. Regulators, compliance teams, and ordinary readers have all ended up on the other end of his reporting.</p>
+  <div class="tag-cloud">
+    <span class="tc hi">⚖️ Regulatory Coverage</span>
+    <span class="tc hi">🔍 Crime and Sanctions Reporting</span>
+    <span class="tc hi2">📊 Chainalysis-sourced Stories</span>
+    <span class="tc hi2">🌀 Mixing Services and AML</span>
+    <span class="tc hi3">🏛️ Policy and Enforcement</span>
+    <span class="tc hi3">⛓️ On-chain Verification</span>
+    <span class="tc">✍️ 7 yrs Journalism</span>
+    <span class="tc">🌍 10 yrs Web3</span>
+    <span class="tc">⚗️ Chemical Engineering</span>
+  </div>
+</div>
+
+<!-- STAT BAR -->
+<div class="statbar">
+  <div class="stat"><span class="sn">3,000+</span><span class="sl">Articles Published</span></div>
+  <div class="stat"><span class="sn">$81B</span><span class="sl">Binance Penalty Tracked</span></div>
+  <div class="stat"><span class="sn">14mo</span><span class="sl">Binance Nigeria Coverage</span></div>
+  <div class="stat"><span class="sn">1</span><span class="sl">Academic Citation</span></div>
+  <div class="stat"><span class="sn">6+</span><span class="sl">Tier-1 Publications</span></div>
+  <div class="stat"><span class="sn">10</span><span class="sl">Years in Web3</span></div>
+</div>
+
+<!-- INTRO -->
+<div class="callout" style="margin:3rem 2rem">
+  <div class="callout-label">How He Approaches This Kind of Story</div>
+  <p>A lot of crypto crime writing repeats the same numbers without explaining what they mean. Osato tends to do the opposite. He takes a Chainalysis figure, a court filing, or a sanctions list, and works out why a reader should care. He has written the same Tornado Cash story for crypto natives following the legal fight and for ordinary readers trying to understand why a piece of code got sanctioned. <strong>That range is the whole job.</strong></p>
+</div>
+
+<div class="divider"></div>
+
+<!-- BINANCE NIGERIA FULL TIMELINE -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-a">🌍</div>
+    <div>
+      <div class="sh-title">Binance and Nigeria: A Story He Owned for Over a Year</div>
+      <div class="sh-sub">From the first detentions to an $81 billion penalty, he was the one writing it down as it happened.</div>
+    </div>
+  </div>
+
+  <div class="feature" style="border-color:rgba(245,158,11,0.25)">
+    <div class="feat-label" style="color:var(--amber)">🎙️ Exclusive Interview · DL News · March 2025</div>
+    <h3>A government minister told him, on the record, why Nigeria went after Binance</h3>
+    <p>A year into the standoff, Osato got Nigeria's Minister of Information, Mohammed Idris, to say plainly what had been driving the case: investigators had found evidence that terrorists and kidnappers had moved money through Binance. That single interview turned a confusing regulatory dispute into a story with a clear stake for ordinary readers, not just compliance teams.</p>
+    <div class="feat-tags">
+      <span class="feat-tag">🏛️ Sitting government minister</span>
+      <span class="feat-tag">🎯 National security framing</span>
+      <span class="feat-tag">📰 Most-cited line in the case</span>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">February 2024</div>
+      <h4>Two Binance executives are detained in Nigeria</h4>
+      <p>Tigran Gambaryan, the US federal agent who led Binance's financial crime compliance unit, and Nadeem Anjarwalla, the exchange's regional manager, are held by Nigerian state security. Osato is among the first to report it and lay out the charges.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">March 2024</div>
+      <h4>Anjarwalla escapes using a hidden passport</h4>
+      <p>During Ramadan prayers, Anjarwalla slips out of custody using a Kenyan passport investigators hadn't accounted for. Osato covers the security failure and the diplomatic scramble that follows.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">Through 2024</div>
+      <h4>An Interpol red notice goes out, and Gambaryan stays in custody</h4>
+      <p>Osato keeps the manhunt and Gambaryan's deteriorating situation in custody on the record long after most outlets move on to other news.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">March 2025</div>
+      <h4>The minister goes on record</h4>
+      <p>Mohammed Idris tells Osato directly that terrorists and kidnappers used Binance to move funds, confirming what had only been alleged before.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-date">2025</div>
+      <h4>Nigeria demands $81 billion, and Binance fights the figure on a technicality</h4>
+      <p>The penalty dwarfs the $4.3 billion Binance paid US authorities in 2023. Binance's defence centres on a claim that prosecutors used the wrong email address to serve notice. Osato reports the legal back-and-forth as it plays out across multiple Nigerian courts.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CHAINALYSIS-SOURCED REPORTING -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-t">📊</div>
+    <div>
+      <div class="sh-title">Stories Built on Chainalysis Data</div>
+      <div class="sh-sub">He treats Chainalysis figures as a starting point for a story, not the whole story.</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct ct-t"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · Nov 2025</div>
+      <h3>Chinese money laundering groups are folding crypto into their operations, new research says</h3>
+      <p>Working from a Royal United Services Institute paper, Osato pulled in Chainalysis figures on 2025 crime losses and pig-butchering scam totals to show how Bitcoin and Tether have become payment tools for fentanyl precursor sellers. He connected an academic paper, a security firm's numbers, and an Europol-adjacent law enforcement quote into one readable story.</p>
+      <div class="cfoot"><span class="chip ch-t">Money Laundering · Stablecoins</span><a href="https://www.dlnews.com/articles/people-culture/chinese-money-launderers-adopting-crypto-new-report-says/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-t"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · Oct 2025</div>
+      <h3>Europol says crypto crime is placing a real strain on law enforcement</h3>
+      <p>Reporting from a global conference on criminal finance, Osato tied Europol's warning about sophisticated crypto crime to Chainalysis data showing wrench attacks, the physical robberies and kidnappings targeting crypto holders, were up more than 54 percent on the year. He gave the statistic somewhere to live by listing where the attacks had actually happened, from France and Sweden to Brazil and Thailand.</p>
+      <div class="cfoot"><span class="chip ch-t">Law Enforcement · Physical Crime</span><a href="https://www.dlnews.com/articles/regulation/europol-crypto-crimes-a-significant-burden-law-enforcement/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SANCTIONS AND MIXERS -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-v">🌀</div>
+    <div>
+      <div class="sh-title">Sanctions, Mixers, and the Tornado Cash Story</div>
+      <div class="sh-sub">He followed this case from the day the sanctions landed through to the criminal trial.</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct ct-v"></div>
+      <div class="cpub"><span class="d d-tb"></span> The Block · 2022</div>
+      <h3>Infura and Alchemy started blocking access to Tornado Cash within hours of the sanctions</h3>
+      <p>Written the day the US Treasury sanctioned Tornado Cash, this piece tracked how infrastructure providers reacted almost immediately, cutting off front-end access to the mixer before most of the industry had processed what had happened. The story has since been cited in academic research on how blockchain sanctions actually get enforced in practice, a sign that the reporting holds up as a primary record of the event.</p>
+      <div class="cfoot"><span class="chip ch-v">Sanctions · Infrastructure</span><a href="https://www.theblock.co/post/162402/infura-and-alchemy-blocking-access-to-tornado-cash" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-v"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2024</div>
+      <h3>Crypto advocates rally behind Tornado Cash developer Alexey Pertsev as his trial nears</h3>
+      <p>Osato covered the human side of the sanctions story: a 30-year-old developer facing money laundering charges tied to North Korean sanctions violations, and a grassroots campaign arguing the case amounted to an attack on financial privacy. He gave both the legal stakes and the community reaction equal space.</p>
+      <div class="cfoot"><span class="chip ch-v">Criminal Trial · Privacy</span><a href="https://www.dlnews.com/articles/regulation/crypto-advocates-rally-for-tornado-cash-dev-alexey-pertsev/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SEC AND REGULATORY POLICY -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-b">🏛️</div>
+    <div>
+      <div class="sh-title">SEC and Regulatory Policy</div>
+      <div class="sh-sub">Tracking how the rules around exchanges, ETFs, and enforcement actually change.</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct ct-b"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · March 2025</div>
+      <h3>Paul Atkins won't just change the SEC's crypto rules, he'll rewrite the agency's playbook</h3>
+      <p>Osato explained what Atkins' confirmation meant in practice: a halt to Gensler-era enforcement actions against Binance, Ripple, and Coinbase, and an unusual situation where the new chair would also be regulating ventures tied to the sitting president.</p>
+      <div class="cfoot"><span class="chip ch-b">SEC · Enforcement</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-b"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Grayscale's XRP and Dogecoin ETF filings get acknowledged by the SEC</h3>
+      <p>Osato explained the legal mechanics of an SEC acknowledgment versus an approval, why the distinction matters, and what it signalled for the wave of altcoin ETF applications waiting behind it.</p>
+      <div class="cfoot"><span class="chip ch-b">SEC · ETF Filings</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-b"></div>
+      <div class="cpub"><span class="d d-yf"></span> Yahoo Finance · 2025</div>
+      <h3>Central banks flag risk in $9 billion of tokenised money-market funds</h3>
+      <p>Reporting on a Bank for International Settlements warning, Osato explained why digital wrappers around traditional money-market instruments don't remove the underlying financial risk, even as the sector grew 265 percent in a year with players like BlackRock involved.</p>
+      <div class="cfoot"><span class="chip ch-b">BIS · TradFi Risk</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ON-CHAIN CRIME -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-g">⛓️</div>
+    <div>
+      <div class="sh-title">Hacks, Exploits, and Verifying the Data Yourself</div>
+      <div class="sh-sub">He doesn't just repeat a post-mortem. He checks the chain himself before writing.</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct ct-g"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Balancer's $128 million exploit kept spreading despite multiple audits</h3>
+      <p>Osato tracked the attacker's wallet directly and found they were still active across 27 vulnerable forks, publishing the warning before the full scope of the exploit was widely known.</p>
+      <div class="cfoot"><span class="chip ch-g">Smart Contract · On-chain Tracking</span><a href="https://www.dlnews.com/articles/defi/balancer-suffers-128m-exploit-despite-multiple-audits/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-g"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>How an attacker used fake tokens to siphon $220 million from Sui's Cetus exchange</h3>
+      <p>Osato rebuilt the attack chain from on-chain data: the fake token mechanism, the cross-chain bridge to Ethereum, the conversion to USDC, and the $37 million still sitting in a traceable wallet.</p>
+      <div class="cfoot"><span class="chip ch-g">Fake Tokens · Cross-chain Tracing</span><a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="clink">Portfolio ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-g"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2024</div>
+      <h3>Stake.com's co-founder confirms private keys stayed safe in $41 million hack</h3>
+      <p>Osato got Stake.com co-founder Edward Craven on the record the same day, separating what had actually been compromised, the transaction-authorisation layer, from what had not, the private keys.</p>
+      <div class="cfoot"><span class="chip ch-g">Exclusive Quote · Wallet Security</span><a href="https://www.dlnews.com/articles/defi/stake-co-founder-says-hacker-did-not-compromise-private-keys/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-g"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Did North Korean hackers hit Upbit for $36 million? The timing is hard to ignore</h3>
+      <p>Osato connected the Upbit hack to Naver's $10 billion acquisition of the exchange's parent company, raising the North Korea question well before it became the consensus explanation.</p>
+      <div class="cfoot"><span class="chip ch-g">Lazarus Group · Timing Analysis</span><a href="https://www.dlnews.com/articles/regulation/did-north-korea-hackers-steal-36m-from-upbit-crypto-exchange/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-g"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Nomad Bridge's $190 million exploiter is arrested in Israel</h3>
+      <p>Osato had already used Coinbase on-chain data to map 88 copycat wallets that drained $88 million through the same flaw back in 2022. This piece closed the loop with the arrest and the charges that followed.</p>
+      <div class="cfoot"><span class="chip ch-g">Bridge Exploit · Arrest</span><a href="https://www.dlnews.com/articles/defi/hacker-behind-190m-nomad-bridge-exploit-arrested-in-israel/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+    <div class="card">
+      <div class="ct ct-g"></div>
+      <div class="cpub"><span class="d d-dl"></span> DL News · 2025</div>
+      <h3>Yearn Finance loses $9 million after an attacker mints trillions of tokens from a maths bug</h3>
+      <p>Osato explained the infinite mint mechanism in plain terms and tracked the attacker's funds to Tornado Cash before Yearn's own team confirmed the breach publicly.</p>
+      <div class="cfoot"><span class="chip ch-g">Smart Contract Bug · Fund Tracing</span><a href="https://www.dlnews.com/articles/defi/yearn-finance-looted-for-9m-after-attacker-minted-trillions/" target="_blank" class="clink">Read ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WRITING SAMPLES -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-t">✍️</div>
+    <div>
+      <div class="sh-title">A Few Lines From the Actual Articles</div>
+      <div class="sh-sub">No buzzwords, just the numbers and what they mean.</div>
+    </div>
+  </div>
+  <div class="sample">
+    <div class="sample-label">On a minister going on record</div>
+    <blockquote>National security concerns drove Nigeria's fight with Binance, the minister says. The exchange is facing multiple criminal cases in Nigeria. The government wants to fine Binance $81 billion.</blockquote>
+    <p class="attrib">Three short sentences carry the source, the stakes, and the number, in that order.</p>
+  </div>
+  <div class="sample">
+    <div class="sample-label">On Europol and physical crime</div>
+    <blockquote>That warning has proven true with wrench attacks up more than 54 percent in 2025 compared to last year. Gruesome attacks have happened in France, Sweden, and Norway and also outside the eurozone in Brazil, Canada, and Thailand.</blockquote>
+    <p class="attrib">An abstract statistic becomes concrete the moment it gets a list of real places attached to it.</p>
+  </div>
+  <div class="sample">
+    <div class="sample-label">On a smart contract bug</div>
+    <blockquote>On Monday, DeFi protocol Yearn Finance suffered a $9 million exploit that affected the project's yETH liquid staking pool token. Yearn lost $22 million in two previous flash loan exploits.</blockquote>
+    <p class="attrib">Gives the new number and immediately anchors it against the protocol's own history, so a reader can judge how bad this one actually is.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- HIGHLIGHTS -->
+<div class="sec">
+  <div class="sh">
+    <div class="si si-t">✅</div>
+    <div>
+      <div class="sh-title">Highlights</div>
+      <div class="sh-sub">A short list of why this body of work fits this kind of role.</div>
+    </div>
+  </div>
+  <div class="hl-grid">
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He stayed on one enforcement case for over a year</h4>
+        <p>The Binance Nigeria story ran from the first detentions through an Interpol notice to an $81 billion penalty, with him reporting nearly every stage of it himself.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He treats Chainalysis data as evidence, not a headline</h4>
+        <p>The Chinese money laundering piece and the Europol coverage both use Chainalysis figures inside a bigger argument, not as the whole story.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>His reporting has been cited in academic research</h4>
+        <p>A 2026 paper on blockchain sanctions evasion, published through the ACM Web Conference, cites his original reporting on Infura and Alchemy blocking Tornado Cash access.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He gets named, on-record sources for enforcement stories</h4>
+        <p>A government minister on the Binance case. A crypto casino co-founder during an active hack. He does not rely only on press releases.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He checks the chain before he writes the story</h4>
+        <p>Balancer, Cetus, Yearn, and Nomad Bridge were all reported using on-chain wallet tracking he did himself, not a summary of someone else's post-mortem.</p>
+      </div>
+    </div>
+    <div class="hl">
+      <div class="chk">✓</div>
+      <div>
+        <h4>He writes the same facts differently for different readers</h4>
+        <p>The Tornado Cash story has been told for crypto-native readers following a court case and for general readers trying to understand why software got sanctioned. The facts stay the same. The framing changes.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSE -->
+<div class="close" style="margin:3rem 2rem">
+  <h2>A writer who already lives in this material</h2>
+  <p>He has spent years sitting at the point where blockchain data, criminal cases, and public policy meet. He knows what a Chainalysis report is good for and where its numbers need context. He has interviewed a government minister mid-enforcement action and a hack victim's co-founder the same day a breach happened, then turned all of it into stories that hold up for readers who already know the space and readers who have never heard of a mixer before. None of this needed inventing. It was already there.</p>
+  <div class="tag-wrap">
+    <span class="ctag">Regulatory Reporting</span>
+    <span class="ctag">Chainalysis-sourced Stories</span>
+    <span class="ctag">Sanctions and Mixers</span>
+    <span class="ctag">On-chain Verification</span>
+    <span class="ctag">Multi-year Enforcement Coverage</span>
+    <span class="ctag">Academic Citation</span>
+    <span class="ctag">Plain Language</span>
+    <span class="ctag">Audience Range</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="fn">Osato Avan-Nomayo</div>
+  <div class="fr">DeFi Correspondent · DL News &nbsp;|&nbsp; formerly The Block · CoinTelegraph · BeInCrypto · Bitcoinist</div>
+  <a href="https://muckrack.com/osato-avan-nomayo/articles" target="_blank" class="cta">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Full Portfolio on Muckrack
+  </a>
+  <div class="contacts">
+    <a href="tel:+2348111571785" class="cbtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.55 3.18 2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.7a16 16 0 0 0 6.4 6.4l1.06-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      +234 811 157 1785
+    </a>
+    <a href="mailto:sato.nomayo@gmail.com" class="cbtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      sato.nomayo@gmail.com
+    </a>
+    <a href="http://www.linkedin.com/in/osato-avan-nomayo-a6308b171" target="_blank" class="cbtn li">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      LinkedIn
+    </a>
+  </div>
+  <div class="pub-links">
+    <a href="https://www.dlnews.com/authors/Osato-Avan-Nomayo/" target="_blank">DL News ↗</a>
+    <a href="https://www.theblock.co/author/osato-avan-nomayo" target="_blank">The Block ↗</a>
+    <a href="https://cointelegraph.com/authors/osato-avan-nomayo" target="_blank">CoinTelegraph ↗</a>
+    <a href="https://beincrypto.com/author/osato/" target="_blank">BeInCrypto ↗</a>
+  </div>
+</div>
+</body>
+</html>
